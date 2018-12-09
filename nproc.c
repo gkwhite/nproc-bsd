@@ -2,7 +2,7 @@
 /*-
  * SPDX-License-Identifier: BSD-2-Clause-FreeBSD
  *
- * Copyright (c) 2018 Greg White.  All rights reserved.
+ * Copyright (c) 2018 Greg White (gkwhite@gmail.com).  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -26,10 +26,14 @@
  * SUCH DAMAGE.
  */
 
-// ToDo:  apsicum
+// ToDo:  capsicum
+
+static char *version = "0.04";
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
+#include <errno.h>
 #include <stdbool.h>
 #include <sys/types.h>
 #include <sys/sysctl.h>
@@ -37,7 +41,7 @@
 
 void usage() {
 	printf("Usage: nproc [OPTION]...\n");
-	printf("Print the number of available processing units.\n\n");
+	printf("Print the number of available processing units.\n");
 	printf("      --all       print the number of available processors\n");
 	printf("      --ignore=N  ignore N processors (minimum result is 1)\n");
 	printf("      --help      display help and exit\n");
@@ -45,10 +49,8 @@ void usage() {
 }
 
 int main(int argc, char **argv) {
-	static char *version = "0.03";
 	int bflag,ch, ignore_count;
 	int option_index=0;
-	bool done;
 	static struct option long_options[] = {
 		{"all",     no_argument,       NULL, 'a'},
 		{"ignore",  required_argument, NULL, 'i'},
@@ -60,19 +62,19 @@ int main(int argc, char **argv) {
 	int mib[2], ncpu, ignorecpu=0;
 	size_t len;
 
-	done = false;
-	while( !done ) {
-		ch = getopt_long(argc, argv, "ai:hv", long_options, NULL);
-		printf("In while: %i %c\n",ch,ch);
-		done=(ch == -1);
+	while( (ch = getopt_long(argc, argv, "ai:hv", long_options, NULL)) != -1) {
 		switch (ch) {
-			case -1:
-				break;
 			case 'a':
 				break;
 			case 'i':
-				printf("ignore = %s\n",optarg);
-				ignorecpu=atoi(optarg);
+				// ignore invalid or negative number of CPUs to ignore
+				// ignore zero CPUs is ok
+				ignorecpu=strtol(optarg,NULL,10);
+				if( ((ignorecpu==0) && ((errno==EINVAL) || (errno==ERANGE)) )
+					|| (ignorecpu<0) ) {
+					printf("nproc: invalid number: %s\n",optarg);
+					exit(EXIT_FAILURE);
+				}
 				break;
 			case 'v':
 				printf("nproc for BSD, version %s\n", version);
@@ -96,6 +98,7 @@ int main(int argc, char **argv) {
 		perror("sysctl failed");
 
     ncpu=ncpu-ignorecpu;
+    // there is always one cpu available
     if(ncpu<1) ncpu=1;
 
 	// print result
