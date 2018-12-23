@@ -26,7 +26,7 @@
  * SUCH DAMAGE.
  */
 
-static char *version = "0.05";
+static char *version = "0.06";
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -51,7 +51,7 @@ void usage() {
 
 int main(int argc, char **argv) {
 
-    /* For argument parsing */
+	/* For argument parsing */
 	int ch;
 	static struct option long_options[] = {
 		{"all",     no_argument,       NULL, 'a'},
@@ -61,15 +61,15 @@ int main(int argc, char **argv) {
 		{NULL,      0,                 NULL, 0  }
 	};
 
-    /* For returning number of processors */
+	/* For returning number of processors */
 	int mib[2], ncpu, ignorecpu=0;
 	size_t len;
 
-    /* Enter capsicum with mininum rights */
+	/* Enter capsicum with mininum rights */
 	if (caph_limit_stdio() < 0 || (cap_enter() < 0 && errno != ENOSYS))
 		err(1, "capsicum");
 
-    /* Parse Arguments */
+	/* Parse Arguments */
 	while( (ch = getopt_long(argc, argv, "ai:hv", long_options, NULL)) != -1) {
 		switch (ch) {
 			case 'a':
@@ -97,17 +97,17 @@ int main(int argc, char **argv) {
 		}
 	}
 
-    /* Get number of cpus from sysctl() */
+	/* Get number of cpus from sysctl() */
 	mib[0] = CTL_HW;
 	mib[1] = HW_NCPU;
 	len = sizeof(ncpu);
 	if(sysctl(mib, 2, &ncpu, &len, NULL, 0) == -1)
 		perror("sysctl failed");
 
-    ncpu=ncpu-ignorecpu;
+	ncpu=ncpu-ignorecpu;
 
-    /* There is always one cpu available */
-    if(ncpu<1) ncpu=1;
+	/* There is always one cpu available */
+	if(ncpu<1) ncpu=1;
 
 	/* Return result */
 	printf("%i\n", ncpu);
