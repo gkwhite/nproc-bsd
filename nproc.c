@@ -26,31 +26,33 @@
  * SUCH DAMAGE.
  */
 
-// ToDo:  capsicum
-
-static char *version = "0.04";
+static char *version = "0.05";
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <err.h>
 #include <errno.h>
 #include <stdbool.h>
 #include <sys/types.h>
 #include <sys/sysctl.h>
 #include <getopt.h>
 
+#include <capsicum_helpers.h>
+
 void usage() {
 	printf("Usage: nproc [OPTION]...\n");
 	printf("Print the number of available processing units.\n");
-	printf("      --all       print the number of available processors\n");
-	printf("      --ignore=N  ignore N processors (minimum result is 1)\n");
-	printf("      --help      display help and exit\n");
-	printf("      --version   dispaly version and exit\n");
+	printf("      -a,   --all       print the number of available processors\n");
+	printf("      -i N, --ignore=N  ignore N processors (minimum result is 1)\n");
+	printf("      -h,   --help      display help and exit\n");
+	printf("      -v,   --version   display version and exit\n");
 }
 
 int main(int argc, char **argv) {
-	int bflag,ch, ignore_count;
-	int option_index=0;
+
+    /* For argument parsing */
+	int ch;
 	static struct option long_options[] = {
 		{"all",     no_argument,       NULL, 'a'},
 		{"ignore",  required_argument, NULL, 'i'},
@@ -59,16 +61,21 @@ int main(int argc, char **argv) {
 		{NULL,      0,                 NULL, 0  }
 	};
 
+    /* For returning number of processors */
 	int mib[2], ncpu, ignorecpu=0;
 	size_t len;
 
+    /* Enter capsicum with mininum rights */
+	if (caph_limit_stdio() < 0 || (cap_enter() < 0 && errno != ENOSYS))
+		err(1, "capsicum");
+
+    /* Parse Arguments */
 	while( (ch = getopt_long(argc, argv, "ai:hv", long_options, NULL)) != -1) {
 		switch (ch) {
 			case 'a':
 				break;
 			case 'i':
-				// ignore invalid or negative number of CPUs to ignore
-				// ignore zero CPUs is ok
+				/* Ignore invalid or negative number of CPUs to ignore, ignore zero CPUs is OK */
 				ignorecpu=strtol(optarg,NULL,10);
 				if( ((ignorecpu==0) && ((errno==EINVAL) || (errno==ERANGE)) )
 					|| (ignorecpu<0) ) {
@@ -90,7 +97,7 @@ int main(int argc, char **argv) {
 		}
 	}
 
-    // get number of cpus from sysctl
+    /* Get number of cpus from sysctl() */
 	mib[0] = CTL_HW;
 	mib[1] = HW_NCPU;
 	len = sizeof(ncpu);
@@ -98,9 +105,10 @@ int main(int argc, char **argv) {
 		perror("sysctl failed");
 
     ncpu=ncpu-ignorecpu;
-    // there is always one cpu available
+
+    /* There is always one cpu available */
     if(ncpu<1) ncpu=1;
 
-	// print result
+	/* Return result */
 	printf("%i\n", ncpu);
 }
