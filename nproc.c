@@ -26,7 +26,7 @@
  * SUCH DAMAGE.
  */
 
-static char *version = "0.06";
+static char *version = "0.07";
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,74 +41,74 @@ static char *version = "0.06";
 #include <capsicum_helpers.h>
 
 void usage() {
-	printf("Usage: nproc [OPTION]...\n");
-	printf("Print the number of available processing units.\n");
-	printf("      -a,   --all       print the number of available processors\n");
-	printf("      -i N, --ignore=N  ignore N processors (minimum result is 1)\n");
-	printf("      -h,   --help      display help and exit\n");
-	printf("      -v,   --version   display version and exit\n");
+    printf("Usage: nproc [OPTION]...\n");
+    printf("Print the number of available processing units.\n");
+    printf("      -a,   --all       print the number of available processors\n");
+    printf("      -i N, --ignore=N  ignore N processors (minimum result is 1)\n");
+    printf("      -h,   --help      display help and exit\n");
+    printf("      -v,   --version   display version and exit\n");
 }
 
 int main(int argc, char **argv) {
 
-	/* For argument parsing */
-	int ch;
-	static struct option long_options[] = {
-		{"all",     no_argument,       NULL, 'a'},
-		{"ignore",  required_argument, NULL, 'i'},
-		{"help",    no_argument,       NULL, 'h'},
-		{"version", no_argument,       NULL, 'v'},
-		{NULL,      0,                 NULL, 0  }
-	};
+    /* For argument parsing */
+    int ch;
+    static struct option long_options[] = {
+        {"all",     no_argument,       NULL, 'a'},
+        {"ignore",  required_argument, NULL, 'i'},
+        {"help",    no_argument,       NULL, 'h'},
+        {"version", no_argument,       NULL, 'v'},
+        {NULL,      0,                 NULL, 0  }
+    };
 
-	/* For returning number of processors */
-	int mib[2], ncpu, ignorecpu=0;
-	size_t len;
+    /* For returning number of processors */
+    int mib[2], ncpu, ignorecpu=0;
+    size_t len;
 
-	/* Enter capsicum with mininum rights */
-	if (caph_limit_stdio() < 0 || (cap_enter() < 0 && errno != ENOSYS))
-		err(1, "capsicum");
+    /* Enter capsicum with mininum rights */
+    if (caph_limit_stdio() < 0 || (cap_enter() < 0 && errno != ENOSYS))
+        err(1, "capsicum");
 
-	/* Parse Arguments */
-	while( (ch = getopt_long(argc, argv, "ai:hv", long_options, NULL)) != -1) {
-		switch (ch) {
-			case 'a':
-				break;
-			case 'i':
-				/* Ignore invalid or negative number of CPUs to ignore, ignore zero CPUs is OK */
-				ignorecpu=strtol(optarg,NULL,10);
-				if( ((ignorecpu==0) && ((errno==EINVAL) || (errno==ERANGE)) )
-					|| (ignorecpu<0) ) {
-					printf("nproc: invalid number: %s\n",optarg);
-					exit(EXIT_FAILURE);
-				}
-				break;
-			case 'v':
-				printf("nproc for BSD, version %s\n", version);
-				printf("Copyright 2018, Greg White (gkwhite@gmail.com)\n");
-				printf("License BSD-2-Clause-FreeBSD\n");
-				exit(EXIT_SUCCESS);
-			case 'h':
-				usage();
-				exit(EXIT_SUCCESS);
-			default:
-				usage();
-				exit(EXIT_FAILURE);
-		}
-	}
+    /* Parse Arguments */
+    while( (ch = getopt_long(argc, argv, "ai:hv", long_options, NULL)) != -1) {
+        switch (ch) {
+            case 'a':
+                break;
+            case 'i':
+                /* Ignore invalid or negative number of CPUs to ignore, ignore zero CPUs is OK */
+                ignorecpu=strtol(optarg,NULL,10);
+                if( ((ignorecpu==0) && ((errno==EINVAL) || (errno==ERANGE)) )
+                    || (ignorecpu<0) ) {
+                    printf("nproc: invalid number: %s\n",optarg);
+                    exit(EXIT_FAILURE);
+                }
+                break;
+            case 'v':
+                printf("nproc for BSD, version %s\n", version);
+                printf("Copyright 2018, Greg White (gkwhite@gmail.com)\n");
+                printf("License BSD-2-Clause-FreeBSD\n");
+                exit(EXIT_SUCCESS);
+            case 'h':
+                usage();
+                exit(EXIT_SUCCESS);
+            default:
+                usage();
+                exit(EXIT_FAILURE);
+        }
+    }
 
-	/* Get number of cpus from sysctl() */
-	mib[0] = CTL_HW;
-	mib[1] = HW_NCPU;
-	len = sizeof(ncpu);
-	if(sysctl(mib, 2, &ncpu, &len, NULL, 0) == -1)
-		perror("sysctl failed");
+    /* Get number of cpus from sysctl() */
+    mib[0] = CTL_HW;
+    mib[1] = HW_NCPU;
+    len = sizeof(ncpu);
+    if(sysctl(mib, 2, &ncpu, &len, NULL, 0) == -1)
+        perror("sysctl failed");
 
-	ncpu=ncpu-ignorecpu;
+    ncpu=ncpu-ignorecpu;
 
-	/* There is always one cpu available */
-	if(ncpu<1) ncpu=1;
+    /* There is always one cpu available */
+    if(ncpu<1) ncpu=1;
 
-	/* Return result */
-	printf("%i\n", ncpu);
+    /* Return result */
+    printf("%i\n", ncpu);
 }
