@@ -2,7 +2,8 @@
 /*-
  * SPDX-License-Identifier: BSD-2-Clause-FreeBSD
  *
- * Copyright (c) 2018 Greg White (gkwhite@gmail.com).  All rights reserved.
+ * Copyright (c) 2018 Greg White (gkwhite@gmail.com).
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -26,89 +27,115 @@
  * SUCH DAMAGE.
  */
 
-static char *version = "0.07";
+#ifndef lint
+static char const copyright[] =
+"@(#) Copyright (c) 2018\n\
+	Greg White (gkwhite@gmail.com).  All rights reserved.\n";
+#endif /* not lint */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <limits.h>
-#include <err.h>
-#include <errno.h>
-#include <stdbool.h>
+
+#ifndef lint
+static char sccsid[] = "@(#)nproc.c	0.08 (Berkeley) 12/30/18";
+#endif /* not lint */
+
+static char *version = "0.08";
+
+#include <sys/cdefs.h>
+__FBSDID("$FreeBSD$");
+
 #include <sys/types.h>
 #include <sys/sysctl.h>
-#include <getopt.h>
 
 #include <capsicum_helpers.h>
+#include <err.h>
+#include <errno.h>
+#include <getopt.h>
+#include <limits.h>
+#include <stdio.h>
+#include <stdlib.h>
 
+/*
+ * Print the usage text for the nproc command
+ */
 void usage() {
-    printf("Usage: nproc [OPTION]...\n");
-    printf("Print the number of available processing units.\n");
-    printf("      -a,   --all       print the number of available processors\n");
-    printf("      -i N, --ignore=N  ignore N processors (minimum result is 1)\n");
-    printf("      -h,   --help      display help and exit\n");
-    printf("      -v,   --version   display version and exit\n");
+	printf("Usage: nproc [-a | --all] [-i N | --ignore=N] [-h | --help] [-v | --version]\n");
+	printf("Print the number of available processing units.\n");
+	printf("      -a,   --all       print the number of available processors\n");
+	printf("      -i N, --ignore=N  ignore N processors (minimum result is 1)\n");
+	printf("      -h,   --help      display help and exit\n");
+	printf("      -v,   --version   display version and exit\n");
 }
 
+/*
+ * Return the number of processing units.  Allow the user to ignore
+ * a certain number of processors, but always return at least 1
+ */
 int main(int argc, char **argv) {
 
-    /* For argument parsing */
-    int ch;
-    static struct option long_options[] = {
-        {"all",     no_argument,       NULL, 'a'},
-        {"ignore",  required_argument, NULL, 'i'},
-        {"help",    no_argument,       NULL, 'h'},
-        {"version", no_argument,       NULL, 'v'},
-        {NULL,      0,                 NULL, 0  }
-    };
+	/* For argument parsing */
+	int ch;
+	static struct option long_options[] = {
+		{"all",     no_argument,       NULL, 'a'},
+		{"ignore",  required_argument, NULL, 'i'},
+		{"help",    no_argument,       NULL, 'h'},
+		{"version", no_argument,       NULL, 'v'},
+		{NULL,      0,                 NULL, 0  }
+	};
 
-    /* For returning number of processors */
-    int mib[2], ncpu, ignorecpu=0;
-    size_t len;
+	/* For returning number of processors */
+	int ignore_ncpu, mib[2], ncpu;
+	size_t len;
 
-    /* Enter capsicum with mininum rights */
-    if (caph_limit_stdio() < 0 || (cap_enter() < 0 && errno != ENOSYS))
-        err(1, "capsicum");
+	/* Enter capsicum with mininum rights */
+	if (caph_limit_stdio() < 0 || (cap_enter() < 0 && errno != ENOSYS))
+		err(1, "capsicum");
 
-    /* Parse Arguments */
-    while( (ch = getopt_long(argc, argv, "ai:hv", long_options, NULL)) != -1) {
-        switch (ch) {
-            case 'a':
-                break;
-            case 'i':
-                /* Ignore invalid or negative number of CPUs to ignore, ignore zero CPUs is OK */
-                ignorecpu=strtol(optarg,NULL,10);
-                if( ((ignorecpu==0) && ((errno==EINVAL) || (errno==ERANGE)) )
-                    || (ignorecpu<0) ) {
-                    printf("nproc: invalid number: %s\n",optarg);
-                    exit(EXIT_FAILURE);
-                }
-                break;
-            case 'v':
-                printf("nproc for BSD, version %s\n", version);
-                printf("Copyright 2018, Greg White (gkwhite@gmail.com)\n");
-                printf("License BSD-2-Clause-FreeBSD\n");
-                exit(EXIT_SUCCESS);
-            case 'h':
-                usage();
-                exit(EXIT_SUCCESS);
-            default:
-                usage();
-                exit(EXIT_FAILURE);
-        }
-    }
+	ignore_ncpu = 0;
 
-    /* Get number of cpus from sysctl() */
-    mib[0] = CTL_HW;
-    mib[1] = HW_NCPU;
-    len = sizeof(ncpu);
-    if(sysctl(mib, 2, &ncpu, &len, NULL, 0) == -1)
-        perror("sysctl failed");
+	/* Parse Arguments */
+	while( (ch = getopt_long(argc, argv, "ai:hv", long_options, NULL)) != -1) {
+		switch (ch) {
+			case 'a':
+				break;
+			case 'i':
+				/* 
+				 * Error on invalid or negative number of CPUs to ignore
+				 * Ignore zero processors is OK
+				 */
+				ignore_ncpu=strtol(optarg, NULL, 10);
+				if( ((ignore_ncpu==0) && ((errno==EINVAL) || (errno==ERANGE)) ) ||
+				    (ignore_ncpu<0) ) {
+					printf("nproc: invalid number: %s\n", optarg);
+					exit(EXIT_FAILURE);
+				}
+				break;
+			case 'v':
+				printf("nproc for BSD, version %s\n", version);
+				printf("Copyright 2018, Greg White (gkwhite@gmail.com)\n");
+				printf("License BSD-2-Clause-FreeBSD\n");
+				exit(EXIT_SUCCESS);
+			case 'h':
+				usage();
+				exit(EXIT_SUCCESS);
+			default:
+				usage();
+				exit(EXIT_FAILURE);
+		}
+	}
 
-    ncpu=ncpu-ignorecpu;
+	/* Get number of cpus from sysctl() */
+	mib[0] = CTL_HW;
+	mib[1] = HW_NCPU;
+	len = sizeof(ncpu);
+	if(sysctl(mib, 2, &ncpu, &len, NULL, 0) == -1)
+		perror("sysctl failed");
 
-    /* There is always one cpu available */
-    if(ncpu<1) ncpu=1;
+	ncpu=ncpu-ignore_ncpu;
 
-    /* Return result */
-    printf("%i\n", ncpu);
+	/* There is always one cpu available */
+	if(ncpu<1)
+		ncpu=1;
+
+	/* Return result */
+	printf("%i\n", ncpu);
 }
