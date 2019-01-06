@@ -18,7 +18,7 @@ echo " "
 echo "------------------------"
 echo "display man page to view"
 echo "------------------------"
-groff -Tascii -mdoc nproc.1
+mandoc nproc.1
 echo " "
 echo "-----------"
 echo "Default run"
