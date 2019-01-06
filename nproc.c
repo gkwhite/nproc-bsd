@@ -2,7 +2,7 @@
 /*-
  * SPDX-License-Identifier: BSD-2-Clause-FreeBSD
  *
- * Copyright (c) 2018 Greg White (gkwhite@gmail.com).
+ * Copyright (c) 2018-2019, Greg White (gkwhite@gmail.com).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
