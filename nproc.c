@@ -2,7 +2,7 @@
 /*-
  * SPDX-License-Identifier: BSD-2-Clause-FreeBSD
  *
- * Copyright (c) 2018-2019, Greg White (gkwhite@gmail.com).
+ * Copyright (c) 2018-2019 Greg White (gkwhite@gmail.com).
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,13 +29,13 @@
 
 #ifndef lint
 static char const copyright[] =
-"@(#) Copyright (c) 2018\n\
+"@(#) Copyright (c) 2018-2019\n\
 	Greg White (gkwhite@gmail.com).  All rights reserved.\n";
 #endif /* not lint */
 
 
 #ifndef lint
-static char sccsid[] = "@(#)nproc.c	0.08 (Berkeley) 12/30/18";
+static char sccsid[] = "@(#)nproc.c	0.09 (Berkeley) 01/06/19";
 #endif /* not lint */
 
 static char *version = "0.08";
@@ -111,7 +111,7 @@ int main(int argc, char **argv) {
 				break;
 			case 'v':
 				printf("nproc for BSD, version %s\n", version);
-				printf("Copyright 2018, Greg White (gkwhite@gmail.com)\n");
+				printf("Copyright 2018-2019, Greg White <gkwhite@gmail.com>\n");
 				printf("License BSD-2-Clause-FreeBSD\n");
 				exit(EXIT_SUCCESS);
 			case 'h':
