@@ -33,7 +33,7 @@
 .Sh SYNOPSIS
 .Nm
 .Op Fl a | Fl -all
-.Op Fl i Ar N | Fl -ignore=N
+.Op Fl i Ar N | Fl -ignoreNs = Ns Ar N
 .Op Fl h | Fl -help
 .Op Fl v | Fl -version
 .Sh DESCRIPTION
@@ -45,7 +45,7 @@ The following options are available:
 .Bl -tag -width Ds
 .It Fl a , Fl Fl all
 Print the number of available processors
-.It Fl i Ar N , Fl Fl ignore=N
+.It Fl i Ar N , Fl Fl ignore Ns = Ns Ar N
 Ignore the specified number of processors.
 .Nm
 will always return at least 1
@@ -54,10 +54,22 @@ Display help and exit
 .It Fl v , Fl Fl version
 Display version number and exit
 .El
+.Pp
+.Nm
+is a simple drop in replacement for the GNU coreutils nproc command often found in Linux.  It processes command line arguments, then calls the
+.Xr sysctl 3
+function.  To perform a similar function in the shell, use the following commands:
+.Pp
+.Dl $ sysctl hw.ncpu | awk '{print $2}'
+.Pp
 .Sh EXIT STATUS
 .Ex -std
-.Sh HISTORY
-.Nm
-is a simple drop in replacement for the GNU coreutils nproc command often found in Linux.
+.Sh SEE ALSO
+.Xr sysctl 3 ,
+.Xr sysctl 8
 .Sh AUTHORS
+.An -nosplit
+The
+.Nm
+utility was written by
 .An Greg White Aq Mt gkwhite@gmail.com .
