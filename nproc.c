@@ -27,6 +27,18 @@
  * SUCH DAMAGE.
  */
 
+/*
+ * nproc is a simple drop in replacement for the GNU coreutils nproc command
+ * that is found in many operating systems.  It displays the number of
+ * processors available on the system.  The utilities purpose is to provide
+ * this replacement in the base os for already written scripts and for 
+ * new users.
+ *
+ * Since FreeBSD does not support OpenMP in base, neither does this.
+ *
+ * The author welcomes questions, comments, or changes.
+ */
+
 #ifndef lint
 static char const copyright[] =
 "@(#) Copyright (c) 2018-2019\n\

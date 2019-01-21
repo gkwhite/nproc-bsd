@@ -631,116 +631,126 @@ ET
 BT
 /F0 11 Tf
 490.545 364.430 Td
-(Linux.) Tj
-ET
-BT
-/F0 11 Tf
-525.074 364.430 Td
-(It) Tj
+(many) Tj
 ET
 BT
 /F0 11 Tf
 81.774 349.041 Td
+(operating) Tj
+ET
+BT
+/F0 11 Tf
+126.071 349.041 Td
+(systems.) Tj
+ET
+BT
+/F0 11 Tf
+169.158 349.041 Td
+(It) Tj
+ET
+BT
+/F0 11 Tf
+178.629 349.041 Td
 (processes) Tj
 ET
 BT
 /F0 11 Tf
-126.676 349.041 Td
+223.531 349.041 Td
 (command) Tj
 ET
 BT
 /F0 11 Tf
-172.810 349.041 Td
+269.665 349.041 Td
 (line) Tj
 ET
 BT
 /F0 11 Tf
-192.060 349.041 Td
+288.915 349.041 Td
 (arguments,) Tj
 ET
 BT
 /F0 11 Tf
-243.386 349.041 Td
+340.241 349.041 Td
 (then) Tj
 ET
 BT
 /F0 11 Tf
-265.078 349.041 Td
+361.933 349.041 Td
 (calls) Tj
 ET
 BT
 /F0 11 Tf
-287.991 349.041 Td
+384.846 349.041 Td
 (the) Tj
 ET
 BT
 /F0 11 Tf
-304.183 349.041 Td
+401.038 349.041 Td
 (sysctl\(3\)) Tj
 ET
 BT
 /F0 11 Tf
-344.817 349.041 Td
+441.672 349.041 Td
 (function.) Tj
 ET
 BT
 /F0 11 Tf
-389.730 349.041 Td
+486.585 349.041 Td
 (To) Tj
 ET
 BT
 /F0 11 Tf
-404.701 349.041 Td
+501.556 349.041 Td
 (perform) Tj
 ET
 BT
 /F0 11 Tf
-442.882 349.041 Td
+81.774 333.652 Td
 (a) Tj
 ET
 BT
 /F0 11 Tf
-450.516 349.041 Td
+89.408 333.652 Td
 (similar) Tj
 ET
 BT
 /F0 11 Tf
-483.824 349.041 Td
+122.716 333.652 Td
 (function) Tj
 ET
 BT
 /F0 11 Tf
-523.237 349.041 Td
+162.129 333.652 Td
 (in) Tj
 ET
 BT
 /F0 11 Tf
-81.774 333.652 Td
+173.437 333.652 Td
 (the) Tj
 ET
 BT
 /F0 11 Tf
-97.966 333.652 Td
+189.629 333.652 Td
 (shell,) Tj
 ET
 BT
 /F0 11 Tf
-124.245 333.652 Td
+215.908 333.652 Td
 (use) Tj
 ET
 BT
 /F0 11 Tf
-141.658 333.652 Td
+233.321 333.652 Td
 (the) Tj
 ET
 BT
 /F0 11 Tf
-157.850 333.652 Td
+249.513 333.652 Td
 (following) Tj
 ET
 BT
 /F0 11 Tf
-203.379 333.652 Td
+295.042 333.652 Td
 (commands:) Tj
 ET
 BT
@@ -883,86 +893,235 @@ ET
 BT
 /F1 11 Tf
 68.024 179.762 Td
-(AUTHORS) Tj
+(BUGS) Tj
 ET
 /F0 11 Tf
 BT
 /F0 11 Tf
 81.774 164.373 Td
-(The) Tj
+(This) Tj
+ET
+BT
+/F0 11 Tf
+104.082 164.373 Td
+(version) Tj
+ET
+BT
+/F0 11 Tf
+139.216 164.373 Td
+(of) Tj
 ET
 /F1 11 Tf
 BT
 /F1 11 Tf
-101.629 164.373 Td
+151.129 164.373 Td
 (nproc) Tj
 ET
 /F0 11 Tf
 BT
 /F0 11 Tf
-131.879 164.373 Td
-(utility) Tj
+181.379 164.373 Td
+(differs) Tj
 ET
 BT
 /F0 11 Tf
-160.919 164.373 Td
-(and) Tj
+212.839 164.373 Td
+(from) Tj
 ET
 BT
 /F0 11 Tf
-179.553 164.373 Td
+236.973 164.373 Td
+(the) Tj
+ET
+BT
+/F0 11 Tf
+253.165 164.373 Td
+(GNU) Tj
+ET
+BT
+/F0 11 Tf
+279.741 164.373 Td
+(coreutils) Tj
+ET
+BT
+/F0 11 Tf
+320.375 164.373 Td
+(version.) Tj
+ET
+BT
+/F0 11 Tf
+358.259 164.373 Td
+(It) Tj
+ET
+BT
+/F0 11 Tf
+367.730 164.373 Td
+(does) Tj
+ET
+BT
+/F0 11 Tf
+390.643 164.373 Td
+(not) Tj
+ET
+BT
+/F0 11 Tf
+407.451 164.373 Td
+(support) Tj
+ET
+BT
+/F0 11 Tf
+443.201 164.373 Td
+(OpenMP.) Tj
+ET
+BT
+/F0 11 Tf
+491.172 164.373 Td
+(This) Tj
+ET
+BT
+/F0 11 Tf
+513.480 164.373 Td
+(is) Tj
+ET
+BT
+/F0 11 Tf
+81.774 148.984 Td
+(because) Tj
+ET
+BT
+/F0 11 Tf
+119.339 148.984 Td
+(FreeBSD) Tj
+ET
+BT
+/F0 11 Tf
+163.031 148.984 Td
+(base) Tj
+ET
+BT
+/F0 11 Tf
+185.328 148.984 Td
+(does) Tj
+ET
+BT
+/F0 11 Tf
+208.241 148.984 Td
+(not) Tj
+ET
+BT
+/F0 11 Tf
+225.049 148.984 Td
+(include) Tj
+ET
+BT
+/F0 11 Tf
+260.183 148.984 Td
+(OpenMP) Tj
+ET
+BT
+/F0 11 Tf
+302.654 148.984 Td
+(support) Tj
+ET
+BT
+/F0 11 Tf
+338.404 148.984 Td
+(at) Tj
+ET
+BT
+/F0 11 Tf
+349.096 148.984 Td
 (this) Tj
 ET
 BT
 /F0 11 Tf
-198.198 164.373 Td
+367.741 148.984 Td
+(time.) Tj
+ET
+/F1 11 Tf
+BT
+/F1 11 Tf
+68.024 118.206 Td
+(AUTHORS) Tj
+ET
+/F0 11 Tf
+BT
+/F0 11 Tf
+81.774 102.817 Td
+(The) Tj
+ET
+/F1 11 Tf
+BT
+/F1 11 Tf
+101.629 102.817 Td
+(nproc) Tj
+ET
+/F0 11 Tf
+BT
+/F0 11 Tf
+131.879 102.817 Td
+(utility) Tj
+ET
+BT
+/F0 11 Tf
+160.919 102.817 Td
+(and) Tj
+ET
+BT
+/F0 11 Tf
+179.553 102.817 Td
+(this) Tj
+ET
+BT
+/F0 11 Tf
+198.198 102.817 Td
 (manual) Tj
 ET
 BT
 /F0 11 Tf
-233.332 164.373 Td
+233.332 102.817 Td
 (page) Tj
 ET
 BT
 /F0 11 Tf
-256.850 164.373 Td
+256.850 102.817 Td
 (was) Tj
 ET
 BT
 /F0 11 Tf
-276.705 164.373 Td
+276.705 102.817 Td
 (written) Tj
 ET
 BT
 /F0 11 Tf
-310.618 164.373 Td
+310.618 102.817 Td
 (by) Tj
 ET
 BT
 /F0 11 Tf
-324.368 164.373 Td
+324.368 102.817 Td
 (Greg) Tj
 ET
 BT
 /F0 11 Tf
-349.107 164.373 Td
+349.107 102.817 Td
 (White) Tj
 ET
 BT
 /F0 11 Tf
-378.741 164.373 Td
+378.741 102.817 Td
 (<) Tj
 ET
 /F2 11 Tf
 BT
 /F2 11 Tf
-384.945 164.373 Td
+384.945 102.817 Td
 (gkwhite@gmail.com) Tj
 ET
 /F0 11 Tf
 BT
 /F0 11 Tf
-475.420 164.373 Td
+475.420 102.817 Td
 (>.) Tj
 ET
 /F0 11 Tf
@@ -1034,7 +1193,7 @@ ET
 endstream
 endobj
 8 0 obj
-9098
+10562
 endobj
 9 0 obj
 <<
@@ -1073,16 +1232,16 @@ xref
 0 12
 0000000000 65535 f 
 0000000009 00000 n 
-0000009709 00000 n 
+0000011174 00000 n 
 0000000030 00000 n 
 0000000112 00000 n 
 0000000193 00000 n 
 0000000276 00000 n 
 0000000363 00000 n 
-0000009513 00000 n 
-0000009533 00000 n 
-0000009628 00000 n 
-0000009792 00000 n 
+0000010977 00000 n 
+0000010998 00000 n 
+0000011093 00000 n 
+0000011257 00000 n 
 trailer
 <<
 /Size 12
@@ -1090,5 +1249,5 @@ trailer
 /Info 1 0 R
 >>
 startxref
-9842
+11307
 %%EOF

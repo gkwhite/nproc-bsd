@@ -56,7 +56,8 @@ Display version number and exit
 .El
 .Pp
 .Nm
-is a simple drop in replacement for the GNU coreutils nproc command often found in Linux.  It processes command line arguments, then calls the
+is a simple drop in replacement for the GNU coreutils nproc command often found in many operating systems.  It processes command line arguments, 
+then calls the
 .Xr sysctl 3
 function.  To perform a similar function in the shell, use the following commands:
 .Pp
@@ -67,6 +68,11 @@ function.  To perform a similar function in the shell, use the following command
 .Sh SEE ALSO
 .Xr sysctl 3 ,
 .Xr sysctl 8
+.Sh BUGS
+This version of 
+.Nm
+differs from the GNU coreutils version. It does
+not support OpenMP.  This is because FreeBSD base does not include OpenMP support at this time.
 .Sh AUTHORS
 .An -nosplit
 The
