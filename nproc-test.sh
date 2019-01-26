@@ -5,7 +5,7 @@
 # first test cc with all warnings
 #
 echo "----------------------------------------------------------------------"
-echo "Build with all warnings, ignore copyright and sccsid unused variables.
+echo "Build with all warnings, ignore copyright and sccsid unused variables."
 echo "Also ignore errors and warnings outside nproc.c"
 echo "----------------------------------------------------------------------"
 cc -Wall -ansi -pedantic -o nproc nproc.c 
