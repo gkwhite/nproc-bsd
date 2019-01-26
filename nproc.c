@@ -32,9 +32,7 @@
  * that is found in many operating systems.  It displays the number of
  * processors available on the system.  The utilities purpose is to provide
  * this replacement in the base os for already written scripts and for 
- * new users.
- *
- * Since FreeBSD does not support OpenMP in base, neither does this.
+ * new users from other operating systems.
  *
  * The author welcomes questions, comments, or changes.
  */
@@ -47,10 +45,10 @@ static char const copyright[] =
 
 
 #ifndef lint
-static char sccsid[] = "@(#)nproc.c	0.10 (Berkeley) 01/06/19";
+static char sccsid[] = "@(#)nproc.c	0.11 (Berkeley) 01/26/19";
 #endif /* not lint */
 
-static char *version = "0.10";
+static char *version = "0.11";
 
 #include <sys/cdefs.h>
 __FBSDID("$FreeBSD$");
@@ -66,6 +64,10 @@ __FBSDID("$FreeBSD$");
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+/* To remove cc warnings about implicit declaration of functions */
+int caph_limit_stdio(void);
+void err(int eval, const char *fmt, ...);
 
 /*
  * Print the usage text for the nproc command
