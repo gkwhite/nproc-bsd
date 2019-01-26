@@ -1,12 +1,13 @@
 #!/bin/sh
 #
-# simple tests for nproc.
+# simple tests for nproc.  needs to be manually checked.
 #
 # first test cc with all warnings
 #
-echo "---------------------------------------------------------------------"
-echo "Build with all warnings, ignore copyright and sccsid unused variables"
-echo "---------------------------------------------------------------------"
+echo "----------------------------------------------------------------------"
+echo "Build with all warnings, ignore copyright and sccsid unused variables.
+echo "Also ignore errors and warnings outside nproc.c"
+echo "----------------------------------------------------------------------"
 cc -Wall -ansi -pedantic -o nproc nproc.c 
 echo " "
 echo "---------------------"
@@ -66,6 +67,13 @@ echo "---------------------------------------------------------"
 echo "---------------------------------------------------------"
 ./nproc --ignore=-1
 echo " "
+echo "---------------------------------------------------------"
+echo "ERROR: run, ignore "z" processors, both -i N and --ignore=N"
+echo "---------------------------------------------------------"
+./nproc -i z
+echo "---------------------------------------------------------"
+./nproc --ignore=z
+echo " "
 echo "----------------------------------------"
 echo "ERROR: run, bad flag, both -f and --flag"
 echo "----------------------------------------"
@@ -84,5 +92,9 @@ echo "----------"
 echo "make clean"
 echo "----------"
 make clean
+echo "-----------------"
+echo "make pdf man page"
+echo "-----------------"
+mandoc -T pdf nproc.1 >nproc.1.pdf
 echo " "
 echo "******************************* Complete *******************************"

@@ -50,7 +50,7 @@ static char const copyright[] =
 static char sccsid[] = "@(#)nproc.c	0.09 (Berkeley) 01/06/19";
 #endif /* not lint */
 
-static char *version = "0.08";
+static char *version = "0.09";
 
 #include <sys/cdefs.h>
 __FBSDID("$FreeBSD$");
@@ -99,8 +99,9 @@ int main(int argc, char **argv) {
 	size_t len;
 
 	/* Enter capsicum with mininum rights */
-	if (caph_limit_stdio() < 0 || (cap_enter() < 0 && errno != ENOSYS))
+	if (caph_limit_stdio() < 0 || (cap_enter() < 0 && errno != ENOSYS)) {
 		err(1, "capsicum");
+	}
 
 	ignore_ncpu = 0;
 
@@ -139,14 +140,16 @@ int main(int argc, char **argv) {
 	mib[0] = CTL_HW;
 	mib[1] = HW_NCPU;
 	len = sizeof(ncpu);
-	if(sysctl(mib, 2, &ncpu, &len, NULL, 0) == -1)
+	if(sysctl(mib, 2, &ncpu, &len, NULL, 0) == -1) {
 		perror("sysctl failed");
+	}
 
 	ncpu=ncpu-ignore_ncpu;
 
 	/* There is always one cpu available */
-	if(ncpu<1)
+	if(ncpu<1) {
 		ncpu=1;
+	}
 
 	/* Return result */
 	printf("%i\n", ncpu);
