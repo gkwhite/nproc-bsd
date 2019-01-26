@@ -33,7 +33,7 @@
 .Sh SYNOPSIS
 .Nm
 .Op Fl a | Fl -all
-.Op Fl i Ar N | Fl -ignoreNs = Ns Ar N
+.Op Fl i Ar N | Fl -ignore Ns = Ns Ar N
 .Op Fl h | Fl -help
 .Op Fl v | Fl -version
 .Sh DESCRIPTION
@@ -44,9 +44,11 @@ command displays the number of processors available
 The following options are available:
 .Bl -tag -width Ds
 .It Fl a , Fl Fl all
-Print the number of available processors
+Print the number of available processors.  This ignores the OpenMP environment variables 
+OMP_NUM_THREADS and OMP_THREAD_LIMIT.
 .It Fl i Ar N , Fl Fl ignore Ns = Ns Ar N
-Ignore the specified number of processors.
+Ignore the specified number of processors.  This happens after accounting for OpenMP
+environment variables OMP_NUM_THREADS and OMP_THREAD_LIMIT.
 .Nm
 will always return at least 1
 .It Fl h . Fl Fl help
@@ -63,16 +65,14 @@ function.  To perform a similar function in the shell, use the following command
 .Pp
 .Dl $ sysctl hw.ncpu | awk '{print $2}'
 .Pp
+Like GNU coreutils nproc command, unless the -a or --all option is used, the OpenMP 
+environment variables OMP_NUM_THREADS and OMP_THREAD_LIMIT provide a minumum and 
+maximum value for the number of processors. However, there is always at least one processor.
 .Sh EXIT STATUS
 .Ex -std
 .Sh SEE ALSO
 .Xr sysctl 3 ,
 .Xr sysctl 8
-.Sh BUGS
-This version of 
-.Nm
-differs from the GNU coreutils version. It does
-not support OpenMP.  This is because FreeBSD base does not include OpenMP support at this time.  It is part of FreeBSD Ports.
 .Sh AUTHORS
 .An -nosplit
 The

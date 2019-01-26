@@ -4,6 +4,8 @@
 #
 # first test cc with all warnings
 #
+unset OMP_NUM_THREADS
+unset OMP_THREAD_LIMIT
 echo "----------------------------------------------------------------------"
 echo "Build with all warnings, ignore copyright and sccsid unused variables."
 echo "Also ignore errors and warnings outside nproc.c"
@@ -88,6 +90,62 @@ echo "---------------------------------------------------------"
 echo "---------------------------------------------------------"
 ./nproc --flag=4
 echo " "
+echo "---------------------------------------------------------"
+echo "OpenMP: run, OMP_NUM_THREADS=1, OMP_THREAD_LIMIT=1"
+echo "---------------------------------------------------------"
+export OMP_NUM_THREADS=1
+export OMP_THREAD_LIMIT=1
+./nproc
+echo " "
+echo "---------------------------------------------------------"
+echo "OpenMP: run -a, OMP_NUM_THREADS=1, OMP_THREAD_LIMIT=1"
+echo "---------------------------------------------------------"
+export OMP_NUM_THREADS=1
+export OMP_THREAD_LIMIT=1
+./nproc -a
+echo " "
+echo "---------------------------------------------------------"
+echo "OpenMP: run --all, OMP_NUM_THREADS=1, OMP_THREAD_LIMIT=1"
+echo "---------------------------------------------------------"
+export OMP_NUM_THREADS=1
+export OMP_THREAD_LIMIT=1
+./nproc --all
+echo " "
+echo "---------------------------------------------------------"
+echo "OpenMP: run -a, OMP_NUM_THREADS=1, OMP_THREAD_LIMIT=2"
+echo "---------------------------------------------------------"
+export OMP_NUM_THREADS=1
+export OMP_THREAD_LIMIT=2
+./nproc -a
+echo " "
+echo "---------------------------------------------------------"
+echo "OpenMP: run, OMP_NUM_THREADS=1, OMP_THREAD_LIMIT=5"
+echo "---------------------------------------------------------"
+export OMP_NUM_THREADS=1
+export OMP_THREAD_LIMIT=5
+./nproc
+echo " "
+echo "---------------------------------------------------------"
+echo "OpenMP: run, OMP_NUM_THREADS=5, OMP_THREAD_LIMIT=5"
+echo "---------------------------------------------------------"
+export OMP_NUM_THREADS=5
+export OMP_THREAD_LIMIT=5
+./nproc
+echo " "
+echo "---------------------------------------------------------"
+echo "OpenMP: run -i 2, OMP_NUM_THREADS=2, OMP_THREAD_LIMIT=2"
+echo "---------------------------------------------------------"
+export OMP_NUM_THREADS=2
+export OMP_THREAD_LIMIT=2
+./nproc -i 2
+echo " "
+echo "---------------------------------------------------------"
+echo "OpenMP: run -i 1, OMP_NUM_THREADS=2, OMP_THREAD_LIMIT=3"
+echo "---------------------------------------------------------"
+export OMP_NUM_THREADS=2
+export OMP_THREAD_LIMIT=3
+./nproc -i 1
+echo " "
 echo "----------"
 echo "make clean"
 echo "----------"
@@ -98,3 +156,5 @@ echo "-----------------"
 mandoc -T pdf nproc.1 >nproc.1.pdf
 echo " "
 echo "******************************* Complete *******************************"
+unset OMP_NUM_THREADS
+unset OMP_THREAD_LIMIT

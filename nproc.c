@@ -47,10 +47,10 @@ static char const copyright[] =
 
 
 #ifndef lint
-static char sccsid[] = "@(#)nproc.c	0.09 (Berkeley) 01/06/19";
+static char sccsid[] = "@(#)nproc.c	0.10 (Berkeley) 01/06/19";
 #endif /* not lint */
 
-static char *version = "0.09";
+static char *version = "0.10";
 
 #include <sys/cdefs.h>
 __FBSDID("$FreeBSD$");
@@ -63,6 +63,7 @@ __FBSDID("$FreeBSD$");
 #include <errno.h>
 #include <getopt.h>
 #include <limits.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -97,6 +98,15 @@ int main(int argc, char **argv) {
 	/* For returning number of processors */
 	int ignore_ncpu, mib[2], ncpu;
 	size_t len;
+	bool option_all=false;
+
+	/* 
+	 * Holds values of OpenMP environment variables 
+	 * OMP_NUM_THREADS and OMP_THREAD_LIMIT
+	 */
+	char *omp_num_threads, *omp_thread_limit;
+	int omp_value_num_threads, omp_value_thread_limit;
+	
 
 	/* Enter capsicum with mininum rights */
 	if (caph_limit_stdio() < 0 || (cap_enter() < 0 && errno != ENOSYS)) {
@@ -109,6 +119,7 @@ int main(int argc, char **argv) {
 	while( (ch = getopt_long(argc, argv, "ai:hv", long_options, NULL)) != -1) {
 		switch (ch) {
 			case 'a':
+			    option_all = true;
 				break;
 			case 'i':
 				/* 
@@ -136,7 +147,7 @@ int main(int argc, char **argv) {
 		}
 	}
 
-	/* Get number of cpus from sysctl() */
+	/* Get number of processors from sysctl() */
 	mib[0] = CTL_HW;
 	mib[1] = HW_NCPU;
 	len = sizeof(ncpu);
@@ -144,9 +155,46 @@ int main(int argc, char **argv) {
 		perror("sysctl failed");
 	}
 
+	if(!option_all) {
+		/* 
+		 * Check for OpenMP environment variables: OMP_NUM_THREADS
+		 * This will be the minumum value for number of processors
+		 */
+		omp_num_threads = getenv("OMP_NUM_THREADS");
+		if (omp_num_threads != NULL) {
+			omp_value_num_threads=strtol(omp_num_threads, NULL, 10);
+			if( ((omp_value_num_threads==0) && ((errno==EINVAL) || (errno==ERANGE)) ) ||
+			    (omp_value_num_threads<0) ) {
+				printf("nproc: invalid value for environment variable OMP_NUM_THREADS: %s\n", omp_num_threads);
+				exit(EXIT_FAILURE);
+			}
+			if (ncpu < omp_value_num_threads) {
+				ncpu = omp_value_num_threads;
+			}
+		}
+
+		/* 
+		 * Check for OpenMP environment variables: OMP_THREAD_LIMIT
+		 * This will be the maximum value for number of processors
+		 */
+		omp_thread_limit = getenv("OMP_THREAD_LIMIT");
+		if (omp_thread_limit != NULL) {
+			omp_value_thread_limit=strtol(omp_thread_limit, NULL, 10);
+			if( ((omp_value_thread_limit==0) && ((errno==EINVAL) || (errno==ERANGE)) ) ||
+			    (omp_value_thread_limit<0) ) {
+				printf("nproc: invalid value for environment variable OMP_THREAD_LIMIT: %s\n", omp_thread_limit);
+				exit(EXIT_FAILURE);
+			}
+			if (ncpu > omp_value_thread_limit) {
+				ncpu = omp_value_thread_limit;
+			}
+		}
+	}
+
+	/* Subtract the number of processors if the user specified to */
 	ncpu=ncpu-ignore_ncpu;
 
-	/* There is always one cpu available */
+	/* There is always one processor available */
 	if(ncpu<1) {
 		ncpu=1;
 	}
